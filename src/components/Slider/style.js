@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-08-27 15:05:55
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-27 15:51:52
+ * @LastEditTime: 2020-08-28 15:34:07
  */
 import styled from 'styled-components'
 import style from '../../assets/global-style'
@@ -16,11 +16,10 @@ export const SliderContainer = styled.div`
   background-color: white;
   .befor {
     position: absolute;
-    top: 0;
-    height: 100px;
+    top: -300px;
+    height: 400px;
     width: 100%;
     background: ${style["theme-color"]};
-    z-index: 1;
   }
   .slider-container {
     position: relative;

@@ -2,12 +2,14 @@
  * @Author: ZSH
  * @Date: 2020-08-27 11:14:46
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-27 15:38:16
+ * @LastEditTime: 2020-08-28 15:42:01
  */
 import React from 'react'
 import Slider from '../../components/Slider'
 import RecommendList from '../../components/list'
-
+import Scroll from '../../baseUI/scroll'
+import { Content } from './style'
+ 
 function Recommend () {
 
   const bannerList = [1,2,3,4].map( () => {
@@ -23,10 +25,14 @@ function Recommend () {
   })
   console.log(bannerList)
   return (
-    <div>
-      <Slider bannerList={bannerList}></Slider>
-      <RecommendList recommendList={recommendList}></RecommendList>
-    </div>
+    <Content>
+      <Scroll>
+        <div>
+          <Slider bannerList={bannerList}></Slider>
+          <RecommendList recommendList={recommendList}></RecommendList>
+        </div>
+      </Scroll>
+    </Content>
   )
 }
 
