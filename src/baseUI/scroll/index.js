@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-08-28 14:55:17
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-28 15:43:31
+ * @LastEditTime: 2020-08-31 14:34:58
  */
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle  } from 'react' 
 import BScroll from "better-scroll"
@@ -49,6 +49,7 @@ const Scroll = forwardRef( (props, ref) => {
     bScroll.on ('scroll', (scroll) => {
       onScroll (scroll)
     })
+    
     return () => {
       // 返回函数，用来清除绑定
       bScroll.off ('scroll')
@@ -83,7 +84,7 @@ const Scroll = forwardRef( (props, ref) => {
     }
   }, [pullDown, bScroll])
 
-  // 一般和 forwardRef 一起使用，ref 已经在 forWardRef 中默认传入
+  // react hook,一般和 forwardRef 一起使用，ref 已经在 forWardRef 中默认传入
   useImperativeHandle (ref, () => ({
     // 给外界暴露 refresh 方法
     refresh () {
@@ -99,7 +100,6 @@ const Scroll = forwardRef( (props, ref) => {
       }
     }
   }))
-  console.log(props)
   return (
     <ScrollContainer ref={scrollContaninerRef}>
       { props.children }

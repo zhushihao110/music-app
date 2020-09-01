@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-08-27 15:03:22
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-27 17:29:03
+ * @LastEditTime: 2020-08-31 14:11:11
  */
 import React, { useEffect, useState } from 'react'
 import { SliderContainer } from './style'
@@ -18,7 +18,7 @@ function Slider (props) {
       let sliderSwiper = new Swiper(".slider-container", {
         loop: true,
         autoplay: {
-          delay: 1000,
+          delay: 2000,
           disableOnInteraction: false
         },
         pagination: {el: '.swiper-pagination'}

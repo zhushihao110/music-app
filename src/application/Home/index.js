@@ -11,7 +11,6 @@ import { NavLink } from 'react-router-dom';// 利用 NavLink 组件进行路由�
 
 function Home (props) {
   const { route } = props
-  console.log(route)
   return <div>
     <Top>
       <span className="iconfont menu">&#xe65c;</span>
