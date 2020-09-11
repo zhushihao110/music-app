@@ -2,10 +2,11 @@
  * @Author: ZSH
  * @Date: 2020-08-27 14:48:39
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-27 14:49:57
+ * @LastEditTime: 2020-08-31 11:34:22
  */
 import { combineReducers } from 'redux-immutable'
+import { reducer as recommendReducer } from '../application/Recommend/store'
 
 export default combineReducers ({
-  // 之后开发具体功能模块的时候添加 reducer
+  recommend: recommendReducer
 });
