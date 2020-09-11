@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-09-01 10:18:31
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-10 11:05:44
+ * @LastEditTime: 2020-09-11 10:36:34
  */
 import React, { useState, useEffect } from 'react'
 import Horizen from '../../baseUI/horizen-item'
@@ -24,7 +24,7 @@ function Singers (props) {
   }
 
    //mock 数据
-   const singerList = [1, 2,3, 4,5,6,7,8,9,10,11,12].map (item => {
+   const singerList = [1, 2,3, 4,5,6,7,8,9,10,11].map (item => {
     return {
       picUrl: "https://p2.music.126.net/uTwOm8AEFFX_BYHvfvFcmQ==/109951164232057952.jpg",
       name: "隔壁老樊",
