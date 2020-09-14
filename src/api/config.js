@@ -2,11 +2,11 @@
  * @Author: ZSH
  * @Date: 2020-08-28 16:27:22
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-01 10:24:35
+ * @LastEditTime: 2020-09-11 16:15:11
  */
 import axios from 'axios'
 
-export const bsaeUrl = 'http://localhost:3300'
+export const bsaeUrl = 'http://118.24.1.33:3300'
 
 const axiosInstance = axios.create({
   baseURL: bsaeUrl
