@@ -2,12 +2,15 @@
  * @Author: ZSH
  * @Date: 2020-08-28 14:55:17
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-31 14:34:58
+ * @LastEditTime: 2020-09-16 16:04:30
  */
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle  } from 'react' 
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle, useMemo  } from 'react' 
 import BScroll from "better-scroll"
-import { ScrollContainer } from './style'
+import { ScrollContainer, PullUpLoading, PullDownLoading } from './style'
 import PropTypes from "prop-types"
+import Loading from '../loading/index'
+import LoadingV2 from '../loading-v2/index'
+import { debounce } from "../../api/util"
 
 const Scroll = forwardRef( (props, ref) => {
 
@@ -18,6 +21,14 @@ const Scroll = forwardRef( (props, ref) => {
 
   const { direction, click, refresh, pullUpLoading, pullDownLoading, bounceTop, bounceBottom } = props
   const { pullUp, pullDown, onScroll } = props
+
+  let pullUpDebounce = useMemo (() => {
+    return debounce(pullUp, 500)
+  }, [pullUp])
+
+  let pullDownDebounce = useMemo (() => {
+    return debounce(pullDown, 500)
+  }, [pullDown])
 
   useEffect (() => {
     const scroll = new BScroll (scrollContaninerRef.current, {
@@ -62,11 +73,11 @@ const Scroll = forwardRef( (props, ref) => {
     bScroll.on ('scrollEnd', () => {
       // 判断是否滑动到了底部
       if (bScroll.y <= bScroll.maxScrollY + 100){
-        pullUp ()
+        pullUpDebounce ()
       }
     });
     return () => {
-      bScroll.off ('scrollEnd');
+      bScroll.off ('scrollEnd', pullUpDebounce);
     }
   }, [pullUp, bScroll])
 
@@ -76,11 +87,11 @@ const Scroll = forwardRef( (props, ref) => {
     bScroll.on ('touchEnd', (pos) => {
       // 判断用户的下拉动作
       if (pos.y > 50) {
-        pullDown ();
+        pullDownDebounce ();
       }
     });
     return () => {
-      bScroll.off ('touchEnd');
+      bScroll.off ('touchEnd', pullDownDebounce);
     }
   }, [pullDown, bScroll])
 
@@ -100,9 +111,16 @@ const Scroll = forwardRef( (props, ref) => {
       }
     }
   }))
+
+  const PullUpdisplayStyle = pullUpLoading ? {display: ""} : { display:"none" }
+  const PullDowndisplayStyle = pullDownLoading ? { display: ""} : { display:"none" }
   return (
     <ScrollContainer ref={scrollContaninerRef}>
       { props.children }
+      {/* 滑到底部加载动画 */}
+      <PullUpLoading style={ PullUpdisplayStyle }><Loading></Loading></PullUpLoading>
+      {/* 顶部下拉刷新动画 */}
+      <PullDownLoading style={ PullDowndisplayStyle }><LoadingV2></LoadingV2></PullDownLoading>
     </ScrollContainer>
   )
 })

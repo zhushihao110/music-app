@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-09-11 10:34:34
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-16 14:45:30
+ * @LastEditTime: 2020-09-16 15:45:21
  */
 import { 
   getHotSingerListRequest, 
@@ -50,6 +50,7 @@ export const getHotSingerList = () => {
       dispatch(changeSingerList(data))
       dispatch(changeEnterLoading(false))
       dispatch(changePullDownLoading(false))
+      dispatch(changePullUpLoading(false))
     }).catch( () => {
       console.log('获取数据失败')
     })
