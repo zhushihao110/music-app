@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-08-27 16:56:50
  * @LastEditors: ZSH
- * @LastEditTime: 2020-08-27 16:56:54
+ * @LastEditTime: 2020-09-16 15:54:32
  */
 export const getCount = (count) => {
   if (count < 0) return;
@@ -12,5 +12,19 @@ export const getCount = (count) => {
     return Math.floor (count/1000)/10 + "万";
   } else  {
     return Math.floor (count / 10000000)/ 10 + "亿";
+  }
+}
+
+// 防抖函数
+export const debounce = (func, delay) => {
+  let timer;
+  return function (...args) {
+    if (timer) {
+      clearTimeout (timer);
+    }
+    timer = setTimeout (() => {
+      func.apply (this, args);
+      clearTimeout (timer);
+    }, delay);
   }
 }

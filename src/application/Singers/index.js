@@ -2,13 +2,14 @@
  * @Author: ZSH
  * @Date: 2020-09-01 10:18:31
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-16 14:50:24
+ * @LastEditTime: 2020-09-16 15:56:24
  */
 import React, { useState, useEffect } from 'react'
 import Horizen from '../../baseUI/horizen-item'
 import { areaType, categoryTypes, alphaTypes } from '../../api/config'
 import { NavContainer, ListItem, ListContainer, List } from './style'
 import Scroll from '../../baseUI/scroll'
+import  LazyLoad, {forceCheck} from 'react-lazyload';
 import { 
   getSingerList, 
   getHotSingerList, 
@@ -20,6 +21,7 @@ import {
   refreshMoreHotSingerList 
 } from './store/actionCreators';
 import {connect} from 'react-redux';
+import Loading from '../../baseUI/loading';
 
 function Singers (props) {
 
@@ -51,6 +53,13 @@ function Singers (props) {
     updateDispatch(type, val, alpha);
   }
 
+  const handlePullUp = () => {
+    pullUpRefreshDispatch (type, area, alpha, type === '', pageCount);
+  };
+  
+  const handlePullDown = () => {
+    pullDownRefreshDispatch (type, area, alpha);
+  };
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
     const { singerList } = props
@@ -61,7 +70,9 @@ function Singers (props) {
             return (
               <ListItem key={item.accountId+""+index}>
                 <div className="img_wrapper">
-                  <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music"/>
+                  <LazyLoad placeholder={<img width="100%" height="100%" src={require ('./singer.png')} alt="music"/>}>
+                    <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music"/>
+                  </LazyLoad>
                 </div>
                 <span className="name">{item.name}</span>
               </ListItem>
@@ -95,9 +106,16 @@ function Singers (props) {
         ></Horizen>
       </NavContainer>
       <ListContainer>
-        <Scroll>
+        <Scroll
+        onScroll={forceCheck}
+        pullUp={ handlePullUp }
+        pullDown = { handlePullDown }
+        pullUpLoading = { pullUpLoading }
+        pullDownLoading = { pullDownLoading }
+        >
           {renderSingerList()}
         </Scroll>
+        {enterLoading? <Loading ></Loading>: null}
       </ListContainer>
     </div>
     
