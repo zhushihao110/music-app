@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-09-11 10:34:34
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-16 15:45:21
+ * @LastEditTime: 2020-09-16 17:55:12
  */
 import { 
   getHotSingerListRequest, 
@@ -46,7 +46,7 @@ export const changePullDownLoading = (data) => ({
 export const getHotSingerList = () => {
   return (dispatch) => {
     getHotSingerListRequest(0).then( res=> {
-      const data = res.artists;
+      const data = res.artists
       dispatch(changeSingerList(data))
       dispatch(changeEnterLoading(false))
       dispatch(changePullDownLoading(false))
@@ -59,10 +59,10 @@ export const getHotSingerList = () => {
 //加载更多热门歌手
 export const refreshMoreHotSingerList = () => {
   return (dispatch, getState) => {
-    const pageCount = getState().getIn(['singers', 'pageCount']);
-    const singerList = getState().getIn(['singers', 'singerList']).toJS();
+    const pageCount = getState().getIn(['singers', 'pageCount'])
+    const singerList = getState().getIn(['singers', 'singerList']).toJS()
     getHotSingerListRequest(pageCount).then(res => {
-      const data = [...singerList, ...res.artists];
+      const data = [...singerList, ...res.artists]
       dispatch(changeSingerList(data))
       dispatch(changePullUpLoading(false))
     }).catch(() => {
@@ -88,8 +88,8 @@ export const getSingerList = (type, area, alpha) => {
 //加载更多歌手
 export const refreshMoreSingerList = (category, alpha) => {
   return (dispatch, getState) => {
-    const pageCount = getState().getIn(['singers', 'pageCount']);
-    const singerList = getState().getIn(['singers', 'singerList']).toJS();
+    const pageCount = getState().getIn(['singers', 'pageCount'])
+    const singerList = getState().getIn(['singers', 'singerList']).toJS()
     getSingerListRequest(category, alpha, pageCount).then(res => {
       const data = [...singerList, ...res.artists]
       dispatch(changeSingerList(data))
