@@ -2,14 +2,14 @@
  * @Author: ZSH
  * @Date: 2020-09-01 10:18:31
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-16 15:56:24
+ * @LastEditTime: 2020-09-16 16:27:10
  */
 import React, { useState, useEffect } from 'react'
 import Horizen from '../../baseUI/horizen-item'
 import { areaType, categoryTypes, alphaTypes } from '../../api/config'
 import { NavContainer, ListItem, ListContainer, List } from './style'
 import Scroll from '../../baseUI/scroll'
-import  LazyLoad, {forceCheck} from 'react-lazyload';
+import  LazyLoad, {forceCheck} from 'react-lazyload'
 import { 
   getSingerList, 
   getHotSingerList, 
@@ -19,9 +19,9 @@ import {
   changePullUpLoading, 
   changePullDownLoading, 
   refreshMoreHotSingerList 
-} from './store/actionCreators';
-import {connect} from 'react-redux';
-import Loading from '../../baseUI/loading';
+} from './store/actionCreators'
+import {connect} from 'react-redux'
+import Loading from '../../baseUI/loading'
 
 function Singers (props) {
 
@@ -34,32 +34,32 @@ function Singers (props) {
   
   useEffect( () => {
     if(!singerList.length && !type && !area && !alpha) {
-      getHotSingerDispatch();
+      getHotSingerDispatch()
     }
   }, [])
 
   const handleUpdateAlpha = (val) => {
     setAlpha (val)
-    updateDispatch(type, area, val);
+    updateDispatch(type, area, val)
   }
 
   const handleUpdateCatetory = (val) => {
     setType (val)
-    updateDispatch(val, area, alpha);
+    updateDispatch(val, area, alpha)
   }
 
   const handleUpdateArea = (val) => {
     setArea (val)
-    updateDispatch(type, val, alpha);
+    updateDispatch(type, val, alpha)
   }
 
   const handlePullUp = () => {
-    pullUpRefreshDispatch (type, area, alpha, type === '', pageCount);
-  };
+    pullUpRefreshDispatch (type, area, alpha, type === '', pageCount)
+  }
   
   const handlePullDown = () => {
-    pullDownRefreshDispatch (type, area, alpha);
-  };
+    pullDownRefreshDispatch (type, area, alpha)
+  }
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
     const { singerList } = props
@@ -133,31 +133,31 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     getHotSingerDispatch() {
-      dispatch(getHotSingerList());
+      dispatch(getHotSingerList())
     },
     updateDispatch(type, area, alpha) {
-      dispatch(changePageCount(0));//由于改变了分类，所以pageCount清零
-      dispatch(changeEnterLoading(true));//loading，现在实现控制逻辑，效果实现放到下一节，后面的loading同理
-      dispatch(getSingerList(type, area, alpha));
+      dispatch(changePageCount(0))//由于改变了分类，所以pageCount清零
+      dispatch(changeEnterLoading(true))//loading，现在实现控制逻辑，效果实现放到下一节，后面的loading同理
+      dispatch(getSingerList(type, area, alpha))
     },
     // 滑到最底部刷新部分的处理
     pullUpRefreshDispatch(type, area, alpha, hot, count) {
-      dispatch(changePullUpLoading(true));
-      dispatch(changePageCount(count+1));
+      dispatch(changePullUpLoading(true))
+      dispatch(changePageCount(count+1))
       if(hot){
-        dispatch(refreshMoreHotSingerList());
+        dispatch(refreshMoreHotSingerList())
       } else {
-        dispatch(refreshMoreSingerList(type, area, alpha));
+        dispatch(refreshMoreSingerList(type, area, alpha))
       }
     },
     //顶部下拉刷新
     pullDownRefreshDispatch(type, area, alpha) {
-      dispatch(changePullDownLoading(true));
-      dispatch(changePageCount(0));//属于重新获取数据
+      dispatch(changePullDownLoading(true))
+      dispatch(changePageCount(0))//属于重新获取数据
       if(type === '' && area === '' && alpha === ''){
-        dispatch(getHotSingerList());
+        dispatch(getHotSingerList())
       } else {
-        dispatch(getSingerList(type, area, alpha));
+        dispatch(getSingerList(type, area, alpha))
       }
     }
   }
