@@ -2,42 +2,62 @@
  * @Author: ZSH
  * @Date: 2020-09-01 10:18:31
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-11 10:57:47
+ * @LastEditTime: 2020-09-16 14:50:24
  */
 import React, { useState, useEffect } from 'react'
 import Horizen from '../../baseUI/horizen-item'
-import { categoryTypes, alphaTypes } from '../../api/config'
+import { areaType, categoryTypes, alphaTypes } from '../../api/config'
 import { NavContainer, ListItem, ListContainer, List } from './style'
 import Scroll from '../../baseUI/scroll'
+import { 
+  getSingerList, 
+  getHotSingerList, 
+  changeEnterLoading, 
+  changePageCount, 
+  refreshMoreSingerList, 
+  changePullUpLoading, 
+  changePullDownLoading, 
+  refreshMoreHotSingerList 
+} from './store/actionCreators';
+import {connect} from 'react-redux';
 
 function Singers (props) {
 
-  let [category, setCategory] = useState ('')
+  let [type, setType] = useState ('')
+  let [area, setArea] = useState ('')
   let [alpha, setAlpha] = useState ('')
 
-  let handleUpdateAlpha = (val) => {
-    setAlpha (val)
-  }
-
-  let handleUpdateCatetory = (val) => {
-    setCategory (val)
-  }
-
-   //mock 数据
-   const singerList = [1, 2,3, 4,5,6,7,8,9,10,11,12].map (item => {
-    return {
-      picUrl: "https://p2.music.126.net/uTwOm8AEFFX_BYHvfvFcmQ==/109951164232057952.jpg",
-      name: "隔壁老樊",
-      accountId: 277313426,
+  const { enterLoading, singerList, pullUpLoading, pullDownLoading, pageCount } = props
+  const { updateDispatch, getHotSingerDispatch, pullUpRefreshDispatch, pullDownRefreshDispatch } = props
+  
+  useEffect( () => {
+    if(!singerList.length && !type && !area && !alpha) {
+      getHotSingerDispatch();
     }
-  })
+  }, [])
+
+  const handleUpdateAlpha = (val) => {
+    setAlpha (val)
+    updateDispatch(type, area, val);
+  }
+
+  const handleUpdateCatetory = (val) => {
+    setType (val)
+    updateDispatch(val, area, alpha);
+  }
+
+  const handleUpdateArea = (val) => {
+    setArea (val)
+    updateDispatch(type, val, alpha);
+  }
 
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
+    const { singerList } = props
     return (
       <List>
         {
-          singerList.map ((item, index) => {
+          singerList.toJS().map ((item, index) => {
             return (
               <ListItem key={item.accountId+""+index}>
                 <div className="img_wrapper">
@@ -56,10 +76,16 @@ function Singers (props) {
     <div>
       <NavContainer>
         <Horizen 
-          title="分类 (默认热门):"
+          title="类型 (默认热门):"
           list={categoryTypes}
           handleClick={handleUpdateCatetory}
-          oldVal={category}
+          oldVal={type}
+        ></Horizen>
+        <Horizen 
+          title="区域 :"
+          list={areaType}
+          handleClick={handleUpdateArea}
+          oldVal={area}
         ></Horizen>
         <Horizen 
           list={alphaTypes} 
@@ -78,4 +104,45 @@ function Singers (props) {
   )
 }
 
-export default React.memo(Singers)
+const mapStateToProps = (state) => ({
+  singerList: state.getIn(['singers', 'singerList']),
+  enterLoading: state.getIn(['singers', 'enterLoading']),
+  pullUpLoading: state.getIn(['singers', 'pullUpLoading']),
+  pullDownLoading: state.getIn(['singers', 'pullDownLoading']),
+  pageCount: state.getIn(['singers', 'pageCount'])
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getHotSingerDispatch() {
+      dispatch(getHotSingerList());
+    },
+    updateDispatch(type, area, alpha) {
+      dispatch(changePageCount(0));//由于改变了分类，所以pageCount清零
+      dispatch(changeEnterLoading(true));//loading，现在实现控制逻辑，效果实现放到下一节，后面的loading同理
+      dispatch(getSingerList(type, area, alpha));
+    },
+    // 滑到最底部刷新部分的处理
+    pullUpRefreshDispatch(type, area, alpha, hot, count) {
+      dispatch(changePullUpLoading(true));
+      dispatch(changePageCount(count+1));
+      if(hot){
+        dispatch(refreshMoreHotSingerList());
+      } else {
+        dispatch(refreshMoreSingerList(type, area, alpha));
+      }
+    },
+    //顶部下拉刷新
+    pullDownRefreshDispatch(type, area, alpha) {
+      dispatch(changePullDownLoading(true));
+      dispatch(changePageCount(0));//属于重新获取数据
+      if(type === '' && area === '' && alpha === ''){
+        dispatch(getHotSingerList());
+      } else {
+        dispatch(getSingerList(type, area, alpha));
+      }
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Singers))

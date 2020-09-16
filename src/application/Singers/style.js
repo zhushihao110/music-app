@@ -2,7 +2,7 @@
  * @Author: ZSH
  * @Date: 2020-09-01 10:18:37
  * @LastEditors: ZSH
- * @LastEditTime: 2020-09-10 11:08:53
+ * @LastEditTime: 2020-09-16 14:47:23
  */
 import styled from'styled-components'
 import style from '../../assets/global-style'
@@ -30,7 +30,7 @@ export const List = styled.div`
 
 export const ListContainer = styled.div`
   position: fixed;
-  top: 160px;
+  top: 190px;
   left: 0;
   bottom: 0;
   overflow: hidden;
